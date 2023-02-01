@@ -401,4 +401,4 @@ pip install -r requirements.txt
 See [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 ## License
-This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE.md) file.
+This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.
