@@ -1,0 +1,8 @@
+boto3==1.26.9
+pandas==1.5.1
+json
+awswrangler
+google-api-python-client==1.6.7
+google-auth-oauthlib==0.5.3
+google-auth-httplib2==0.1.0
+fastparquet==2022.11.0
