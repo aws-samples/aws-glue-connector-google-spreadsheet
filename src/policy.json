@@ -1,0 +1,57 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ReadFromOutputAndInputBuckets",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::your_data_bucket",
+                "arn:aws:s3:::your_data_bucket/*",
+                "arn:aws:s3:::your_scrip_bucket",
+                "arn:aws:s3:::your_scrip_bucket/*"
+            ]
+        },
+        {
+            "Sid": "WriteToOutputDataBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::your_data_bucket/*",
+                "arn:aws:s3:::your_scrip_bucket/*"
+            ]
+        },
+        {
+            "Sid": "SecretsAccess",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:ListSecretVersionIds"
+            ],
+            "Resource": [
+                "google_secret_name_arn"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
+            ],
+            "Resource": [
+                "output_log_group_arn:*",
+                "error_log_group_arn:*"
+            ]
+        }
+    ]
+}
