@@ -70,13 +70,11 @@ Navigate to [Amazon S3 Console](https://s3.console.aws.amazon.com/s3/home) and [
 
 ### Store Credentials in AWS Secrets Manager
 
-Copy the credentials JSON file in `AWS Secrets Manager` as a Key/value object. 
+Copy the credentials JSON file in `AWS Secrets Manager` as a key/value object. 
 
 1. Open [Secrets Manager console](https://console.aws.amazon.com/secretsmanager/home) and `Store a new secret`. 
 
-2. Choose the option `other type of secret` and paste your JSON object in plain text and assign a name.
-
-
+2. Choose the option `other type of secret` and paste your `JSON` object in plain text and assign a name.
 
 
 [<img src="res/images/secrets_1.png" width="500" style="display: block; margin: 0 auto"/>]()
@@ -87,29 +85,33 @@ Copy the credentials JSON file in `AWS Secrets Manager` as a Key/value object.
 
 ### Setup AWS IAM Role for AWS Glue, AWS Secrets Manager, and Amazon S3
 
-Create an `IAM role` to execute the necessary operations, with the following information:
+Create an `IAM role` to execute the necessary operations:
 
-- Name: gsheet-glue-role (Choose your role name)
-- permissions:
-    - AWS Glue: Create and Run job
-    - Amazon S3: Read and Write
-    - Amazon CloudWatch: Read and Write
-    - AWS Secrets Manager: Read and write
 
-**It is recommended to attach the minimum set of permission per role** 
 
 1. Navigate to [IAM Console](https://us-east-1.console.aws.amazon.com/iamv2/home) and click `Roles`. 
 
-2. Create `Role` and choose `Glue` in other AWS services 
+2. Create `Role` and choose `Glue` in other AWS services.
 
 [<img src="res/images/iam_1.png" width="500" style="display: block; margin: 0 auto"/>]()
 
-3. [Attach the necessary permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions_create-policies.html) listed above. Click Next and assign a name to the role. 
+3. Create a new custom policy for this role. Chose `JSON`tab to edit your policy and [Use this policy file](./src/policy.json) to attach the minimum necessary permissions. Remember to modify the policy with your resources values. 
 
-4. Make sure that the `Trust Policy` allows this role to assume `AWS Glue`.
+[<img src="res/images/iam_policy_creation.png" width="500" style="display: block; margin: 0 auto"/>]()
+[<img src="res/images/iam_policy.png" width="500" style="display: block; margin: 0 auto"/>]()
+
+These are the necessary permissions to run the job:
+- Amazon S3: Read and Write
+- Amazon CloudWatch: List and Write
+- AWS Secrets Manager: Read
+
+**It is recommended to attach the minimum set of permission per role** 
+
+4. Make sure that the `Trust Policy` allows this role to assume `AWS Glue`. Click Next and assign a name to the role. 
 
 [<img src="res/images/iam_3.png" width="500" style="display: block; margin: 0 auto"/>]()
 
+5. Choose a name for your role. Use `gsheet-glue-role` as a suggestion.
 
 ### Create Glue Python Shell Job (Glue Interface)
 
@@ -122,7 +124,7 @@ The use of [AWS Glue for Python Shell](https://docs.aws.amazon.com/glue/latest/d
 
 [<img src="res/images/glue_1.png" width="500" style="display: block; margin: 0 auto"/>]()
 
-5. Modify the job title and copy the [code sample](./src/DataPullGdrive.py). 
+5. Modify the job title and copy the [script](./src/DataPullGdrive.py). 
 
 ```python
 """
@@ -331,9 +333,9 @@ The code uses a set of script variables to easily integrate with your pipeline. 
 ### Create Glue Python Shell Job (AWS CLI)
 In case you would prefer to use `AWS CLI` to create your `Glue Job` follow those steps: 
 
-1. Save the [code sample](./src/DataPullGdrive.py) file in a `S3 Bucket`(Reuse the Bucket you have created before or create new one)
+1. Save the [code sample](./src/DataPullGdrive.py) file in a `S3 Bucket`. (Reuse the Bucket you have created before or create new one)
 2. Open your preferred `shell` terminal with configured `AWS CLI` access to your account. 
-3. Execute the following bash command
+3. Execute the following bash command:
 
 ```bash
 aws glue create-job --profile account-session #Choose the profile that enables access to your account
@@ -379,9 +381,9 @@ aws glue start-job-run --job-name google_spreadsheet_data
 ```
 
 ## Clean up
-AWS Glue is a fully managed service and you will not incur in extra charges if you do not run your jobs. Additionally, In order to avoid any additional charge delete the following resources:
-- Data bucket in Amazon S3
-- Service Account credentials in AWS Secrets Manager 
+AWS Glue is a fully managed service and you will not incur in extra charges if you do not run your jobs. However, to avoid any additional charges linked to other services follow these steps:
+- [Empty](https://docs.aws.amazon.com/AmazonS3/latest/userguide/empty-bucket.html) and [delete](https://docs.aws.amazon.com/AmazonS3/latest/userguide/delete-bucket.html) the S3 bucket.
+- [Delete Google Service Account credentials](https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_delete-secret.html) in AWS Secrets Manager .
 
 ## (Optional) For local testing
 In case you want to try the code locally or you would like to add new capabilities to this routine, we recommend to test it locally. Use your preferred code IDE with the same `JSON` credentials file you have created previously and make any  enhancements that applies to your use case. Once you are satisfied with your code follow the steps in this tutorial with your new routine. 
@@ -401,4 +403,4 @@ pip install -r requirements.txt
 See [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
 ## License
-This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.
+This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE.md) file.
