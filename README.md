@@ -124,7 +124,7 @@ The use of [AWS Glue for Python Shell](https://docs.aws.amazon.com/glue/latest/d
 
 [<img src="res/images/glue_1.png" width="500" style="display: block; margin: 0 auto"/>]()
 
-5. Modify the job title and copy the the [script](./src/DataPullGdrive.py). 
+5. Modify the job title and copy the [script](./src/DataPullGdrive.py). 
 
 ```python
 """
